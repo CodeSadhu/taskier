@@ -1,22 +1,29 @@
 import 'package:appwrite_hack/screens/login.dart';
-import 'package:appwrite_hack/utils/appwrite_config.dart';
+import 'package:appwrite_hack/screens/signup.dart';
+import 'package:appwrite_hack/utils/app_routes.dart';
+import 'package:appwrite_hack/utils/appwrite_service.dart';
 import 'package:appwrite_hack/utils/colors.dart';
 import 'package:appwrite_hack/utils/constants.dart';
+import 'package:appwrite_hack/utils/shared_prefs_helper.dart';
+import 'package:appwrite_hack/utils/strings.dart';
 import 'package:flutter/material.dart';
-import 'package:appwrite/appwrite.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
   configureAppwrite();
+  SharedPrefs.init();
   runApp(const MyApp());
 }
 
 void configureAppwrite() {
-  Client client = Client();
-  client
-      .setEndpoint(AppwriteStuff.baseUrl)
-      .setProject(AppwriteStuff.projectId)
-      .setSelfSigned();
+  AppwriteService.initialize(
+    endpoint: Strings.baseUrl,
+    projectId: Strings.projectId,
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -27,14 +34,20 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: appTheme(),
+      debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.dark,
-      home: const HomePage(),
+      home: const MainPage(),
+      routes: {
+        AppRoutes.login: (context) => const LoginPage(),
+        AppRoutes.signup: (context) => const SignupPage(),
+      },
     );
   }
 
   ThemeData appTheme() {
     return ThemeData(
       useMaterial3: true,
+      fontFamily: Strings.appFont,
       appBarTheme: const AppBarTheme(
         backgroundColor: ColorPalette.background,
       ),
@@ -49,8 +62,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class MainPage extends StatelessWidget {
+  const MainPage({super.key});
 
   @override
   Widget build(BuildContext context) {

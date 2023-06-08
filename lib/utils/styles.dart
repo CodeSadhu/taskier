@@ -1,3 +1,5 @@
+import 'package:appwrite_hack/utils/constants.dart';
+import 'package:appwrite_hack/utils/strings.dart';
 import 'package:flutter/material.dart';
 
 class Styles {
@@ -11,10 +13,12 @@ class Styles {
     FontStyle? fontStyle,
   }) {
     return TextStyle(
-      fontSize: fontSize ?? 32,
+      fontSize: fontSize ?? 36,
       color: color ?? Colors.white,
-      fontWeight: fontWeight,
+      fontWeight: fontWeight ?? FontWeight.w500,
       fontStyle: fontStyle,
+      decoration: decoration,
+      fontFamily: Strings.appFont,
     );
   }
 
@@ -30,6 +34,8 @@ class Styles {
       color: color ?? Colors.white,
       fontWeight: fontWeight,
       fontStyle: fontStyle,
+      decoration: decoration,
+      fontFamily: Strings.appFont,
     );
   }
 
@@ -45,6 +51,8 @@ class Styles {
       color: color ?? Colors.white,
       fontWeight: fontWeight,
       fontStyle: fontStyle,
+      decoration: decoration,
+      fontFamily: Strings.appFont,
     );
   }
 
@@ -60,6 +68,8 @@ class Styles {
       color: color ?? Colors.white,
       fontWeight: fontWeight,
       fontStyle: fontStyle,
+      decoration: decoration,
+      fontFamily: Strings.appFont,
     );
   }
 
@@ -75,6 +85,8 @@ class Styles {
       color: color ?? Colors.white,
       fontWeight: fontWeight,
       fontStyle: fontStyle,
+      decoration: decoration,
+      fontFamily: Strings.appFont,
     );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:appwrite/models.dart';
+import 'package:appwrite/appwrite.dart';
 import 'package:appwrite_hack/utils/app_routes.dart';
 import 'package:appwrite_hack/utils/appwrite_service.dart';
 import 'package:appwrite_hack/utils/assets.dart';
@@ -9,14 +9,14 @@ import 'package:appwrite_hack/utils/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignupPage> createState() => _SignupPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignupPageState extends State<SignupPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -154,19 +154,30 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             onPressed: () async {
-              final user = AppwriteService.account.createEmailSession(
+              final user = AppwriteService.account.create(
+                userId: ID.unique(),
                 email: _emailController.text,
                 password: _passwordController.text,
               );
               user.then((value) {
-                Constants.navigateToDashboard(
-                  providerAccessToken: value.providerAccessToken,
-                  providerRefreshToken: value.providerRefreshToken,
-                );
+                if (value.email.isNotEmpty &&
+                    value.password != null &&
+                    value.password!.isNotEmpty) {
+                  final account = AppwriteService.account.createEmailSession(
+                    email: _emailController.text,
+                    password: _passwordController.text,
+                  );
+                  account.then((value) {
+                    Constants.navigateToDashboard(
+                      providerAccessToken: value.providerAccessToken,
+                      providerRefreshToken: value.providerRefreshToken,
+                    );
+                  });
+                }
               });
             },
             child: Text(
-              'Log In',
+              'Sign Up',
               style: Styles.h2Style(),
             ),
           ),
@@ -175,15 +186,15 @@ class _LoginPageState extends State<LoginPage> {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.pushReplacementNamed(context, AppRoutes.signup);
+              Navigator.pushReplacementNamed(context, AppRoutes.login);
             },
             child: RichText(
               text: TextSpan(
-                text: 'Don\'t have an account? ',
+                text: 'Already have an account? ',
                 style: Styles.smallBodyStyle(),
                 children: [
                   TextSpan(
-                    text: 'Create one!',
+                    text: 'Log in',
                     style: Styles.smallBodyStyle(
                       decoration: TextDecoration.underline,
                     ),
