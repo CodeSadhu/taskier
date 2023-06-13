@@ -1,3 +1,4 @@
+import 'package:appwrite_hack/screens/dashboard.dart';
 import 'package:appwrite_hack/screens/login.dart';
 import 'package:appwrite_hack/screens/signup.dart';
 import 'package:appwrite_hack/utils/app_routes.dart';
@@ -9,13 +10,13 @@ import 'package:appwrite_hack/utils/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
   configureAppwrite();
-  SharedPrefs.init();
+  await SharedPrefs.init();
   runApp(const MyApp());
 }
 
@@ -32,14 +33,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: Constants.rootKey,
       title: 'Flutter Demo',
       theme: appTheme(),
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.dark,
-      home: const MainPage(),
       routes: {
+        AppRoutes.initial: (context) => const MainPage(),
         AppRoutes.login: (context) => const LoginPage(),
         AppRoutes.signup: (context) => const SignupPage(),
+        AppRoutes.dashboard: (context) => const DashboardPage(),
       },
     );
   }
@@ -62,12 +65,34 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
   const MainPage({super.key});
 
   @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  String? token;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    token = SharedPrefs.getToken();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final Size size = Constants.getSize(context);
-    return LoginPage();
+    if (token == null) {
+      return const LoginPage();
+    } else {
+      return const DashboardPage();
+    }
   }
 }

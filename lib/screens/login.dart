@@ -103,6 +103,9 @@ class _LoginPageState extends State<LoginPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TextFormField(
+            style: const TextStyle(
+              color: Colors.white,
+            ),
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             decoration: const InputDecoration(
@@ -122,6 +125,10 @@ class _LoginPageState extends State<LoginPage> {
             height: size.height * 0.01,
           ),
           TextFormField(
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+            controller: _passwordController,
             keyboardType: TextInputType.visiblePassword,
             decoration: const InputDecoration(
               hintText: 'Password',
@@ -160,8 +167,9 @@ class _LoginPageState extends State<LoginPage> {
               );
               user.then((value) {
                 Constants.navigateToDashboard(
-                  providerAccessToken: value.providerAccessToken,
-                  providerRefreshToken: value.providerRefreshToken,
+                  userId: value.userId,
+                  // providerAccessToken: value.providerAccessToken,
+                  // providerRefreshToken: value.providerRefreshToken,
                 );
               });
             },

@@ -9,7 +9,10 @@ class AppwriteService {
     required String projectId,
   }) {
     final client = Client();
-    client.setEndpoint(endpoint).setProject(projectId);
+    client
+        .setEndpoint(endpoint)
+        .setProject(projectId)
+        .setSelfSigned(status: true);
 
     account = Account(client);
     database = Databases(client);
