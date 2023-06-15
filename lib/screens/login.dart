@@ -1,10 +1,8 @@
-import 'package:appwrite/models.dart';
 import 'package:appwrite_hack/utils/app_routes.dart';
 import 'package:appwrite_hack/utils/appwrite_service.dart';
 import 'package:appwrite_hack/utils/assets.dart';
 import 'package:appwrite_hack/utils/colors.dart';
 import 'package:appwrite_hack/utils/constants.dart';
-import 'package:appwrite_hack/utils/shared_prefs_helper.dart';
 import 'package:appwrite_hack/utils/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -89,6 +87,15 @@ class _LoginPageState extends State<LoginPage> {
         maxWidth: size.width,
       ),
       decoration: const BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: ColorPalette.backgroundGrey,
+            blurRadius: 20,
+            blurStyle: BlurStyle.outer,
+            offset: Offset.zero,
+            spreadRadius: -5,
+          ),
+        ],
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -108,17 +115,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(
-              hintText: 'Email',
-              hintStyle: TextStyle(color: Colors.grey),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: ColorPalette.primary,
-                ),
-              ),
+            decoration: Styles.inputDecoration(
+              hintText: 'Enter your email',
             ),
           ),
           SizedBox(
@@ -130,17 +128,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
             controller: _passwordController,
             keyboardType: TextInputType.visiblePassword,
-            decoration: const InputDecoration(
-              hintText: 'Password',
-              hintStyle: TextStyle(color: Colors.grey),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: ColorPalette.primary,
-                ),
-              ),
+            decoration: Styles.inputDecoration(
+              hintText: 'Enter your password',
             ),
             obscureText: true,
           ),

@@ -1,4 +1,4 @@
-import 'package:appwrite_hack/utils/constants.dart';
+import 'package:appwrite_hack/utils/colors.dart';
 import 'package:appwrite_hack/utils/strings.dart';
 import 'package:flutter/material.dart';
 
@@ -87,6 +87,28 @@ class Styles {
       fontStyle: fontStyle,
       decoration: decoration,
       fontFamily: Strings.appFont,
+    );
+  }
+
+  static InputDecoration inputDecoration({
+    String? hintText,
+    TextStyle? hintStyle,
+    InputBorder? enabledBorder,
+    InputBorder? focusedBorder,
+  }) {
+    return InputDecoration(
+      hintText: hintText,
+      hintStyle: hintStyle ?? const TextStyle(color: Colors.grey),
+      enabledBorder: enabledBorder ??
+          const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey),
+          ),
+      focusedBorder: focusedBorder ??
+          const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: ColorPalette.primary,
+            ),
+          ),
     );
   }
 }

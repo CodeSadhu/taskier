@@ -1,6 +1,6 @@
+import 'package:appwrite_hack/models/task_model.dart';
 import 'package:appwrite_hack/screens/dashboard.dart';
 import 'package:appwrite_hack/screens/login.dart';
-import 'package:appwrite_hack/screens/signup.dart';
 import 'package:appwrite_hack/utils/app_routes.dart';
 import 'package:appwrite_hack/utils/appwrite_service.dart';
 import 'package:appwrite_hack/utils/colors.dart';
@@ -9,6 +9,7 @@ import 'package:appwrite_hack/utils/shared_prefs_helper.dart';
 import 'package:appwrite_hack/utils/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,8 +17,15 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
   configureAppwrite();
+  await initializeHive();
   await SharedPrefs.init();
   runApp(const MyApp());
+}
+
+Future<void> initializeHive() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(TaskModelAdapter());
+  await Hive.openBox<TaskModel>(Strings.tasks);
 }
 
 void configureAppwrite() {
@@ -38,12 +46,7 @@ class MyApp extends StatelessWidget {
       theme: appTheme(),
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.dark,
-      routes: {
-        AppRoutes.initial: (context) => const MainPage(),
-        AppRoutes.login: (context) => const LoginPage(),
-        AppRoutes.signup: (context) => const SignupPage(),
-        AppRoutes.dashboard: (context) => const DashboardPage(),
-      },
+      routes: AppRoutes.getAppRoutes,
     );
   }
 
@@ -53,6 +56,11 @@ class MyApp extends StatelessWidget {
       fontFamily: Strings.appFont,
       appBarTheme: const AppBarTheme(
         backgroundColor: ColorPalette.background,
+      ),
+      inputDecorationTheme: const InputDecorationTheme(
+        labelStyle: TextStyle(
+          color: Colors.white,
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
