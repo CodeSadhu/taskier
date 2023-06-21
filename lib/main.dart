@@ -1,4 +1,5 @@
 import 'package:appwrite_hack/models/task_model.dart';
+import 'package:appwrite_hack/providers/common_provider.dart';
 import 'package:appwrite_hack/screens/dashboard.dart';
 import 'package:appwrite_hack/screens/login.dart';
 import 'package:appwrite_hack/utils/app_routes.dart';
@@ -7,9 +8,11 @@ import 'package:appwrite_hack/utils/colors.dart';
 import 'package:appwrite_hack/utils/constants.dart';
 import 'package:appwrite_hack/utils/shared_prefs_helper.dart';
 import 'package:appwrite_hack/utils/strings.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +22,16 @@ void main() async {
   configureAppwrite();
   await initializeHive();
   await SharedPrefs.init();
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => CommonProvider(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 Future<void> initializeHive() async {
@@ -82,12 +94,24 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   String? token;
+  late CommonProvider _commonProvider;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     token = SharedPrefs.getToken();
+    _commonProvider = Provider.of<CommonProvider>(context, listen: false);
+  }
+
+  void checkConnection() async {
+    final ConnectivityResult state = await Connectivity().checkConnectivity();
+    if (state == ConnectivityResult.mobile ||
+        state == ConnectivityResult.wifi ||
+        state == ConnectivityResult.ethernet ||
+        state == ConnectivityResult.vpn) {
+      _commonProvider.connectionChanged(true);
+    }
   }
 
   @override
