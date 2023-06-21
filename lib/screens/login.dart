@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
                 Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Todo Hack',
+                    'Taskier',
                     style: Styles.appbarStyle(
                       fontSize: 38,
                     ),

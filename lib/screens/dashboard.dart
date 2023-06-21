@@ -3,7 +3,6 @@ import 'package:appwrite_hack/utils/app_routes.dart';
 import 'package:appwrite_hack/utils/assets.dart';
 import 'package:appwrite_hack/utils/colors.dart';
 import 'package:appwrite_hack/utils/constants.dart';
-import 'package:appwrite_hack/utils/shared_prefs_helper.dart';
 import 'package:appwrite_hack/utils/strings.dart';
 import 'package:appwrite_hack/utils/styles.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +70,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Todo Hack',
+                    'Taskier',
                     style: Styles.appbarStyle(),
                   ),
                   IconButton(

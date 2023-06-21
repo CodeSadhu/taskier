@@ -44,7 +44,7 @@ class _SignupPageState extends State<SignupPage> {
                 Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Todo Hack',
+                    'Taskier',
                     style: Styles.appbarStyle(
                       fontSize: 38,
                     ),
