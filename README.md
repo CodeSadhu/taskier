@@ -17,7 +17,7 @@ Taskier is a Flutter app that serves as a tasks/todo manager, allowing users to 
 2. Clone the Taskier repository:
 
    ```bash
-   git clone https://github.com/CodeSadhu/todo-appwrite.git
+   git clone https://github.com/CodeSadhu/taskier.git
    ```
 
 3. Navigate to the project directory:
