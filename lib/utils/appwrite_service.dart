@@ -3,6 +3,8 @@ import 'package:appwrite/appwrite.dart';
 class AppwriteService {
   static late Account account;
   static late Databases database;
+  // static late Collection collection;
+  static late Permission permission;
 
   static void initialize({
     required String endpoint,

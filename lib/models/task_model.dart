@@ -1,6 +1,31 @@
 import 'package:hive/hive.dart';
 part 'task_model.g.dart';
 
+@HiveType(typeId: 1)
+class TaskListModel {
+  @HiveField(0)
+  List<TaskModel>? tasks;
+
+  TaskListModel({this.tasks});
+
+  TaskListModel.fromJson(Map<String, dynamic> json) {
+    if (json['tasks'] != null) {
+      tasks = <TaskModel>[];
+      json['tasks'].forEach((v) {
+        tasks!.add(TaskModel.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (tasks != null) {
+      data['tasks'] = tasks!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
 @HiveType(typeId: 0)
 class TaskModel {
   @HiveField(0)
