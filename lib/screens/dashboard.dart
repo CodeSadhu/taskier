@@ -1,13 +1,18 @@
+import 'package:appwrite/appwrite.dart';
 import 'package:appwrite_hack/models/task_model.dart';
+import 'package:appwrite_hack/providers/common_provider.dart';
 import 'package:appwrite_hack/utils/app_routes.dart';
+import 'package:appwrite_hack/utils/appwrite_service.dart';
 import 'package:appwrite_hack/utils/assets.dart';
 import 'package:appwrite_hack/utils/colors.dart';
 import 'package:appwrite_hack/utils/constants.dart';
 import 'package:appwrite_hack/utils/strings.dart';
 import 'package:appwrite_hack/utils/styles.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -19,12 +24,45 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   late Box<TaskModel> taskBox;
   late Size size;
+  late CommonProvider _commonProvider;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _commonProvider = Provider.of<CommonProvider>(context, listen: false);
+    // AppwriteService.database.getDocument(databaseId: Strings.databaseId, collectionId: Strings.collectionId, documentId: Strings.);
     taskBox = Hive.box<TaskModel>(Strings.tasks);
+  }
+
+  void checkConnection() async {
+    final ConnectivityResult state = await Connectivity().checkConnectivity();
+    if (state == ConnectivityResult.mobile ||
+        state == ConnectivityResult.wifi ||
+        state == ConnectivityResult.ethernet ||
+        state == ConnectivityResult.vpn) {
+      _commonProvider.connectionChanged(true);
+      var box = Hive.box<TaskModel>(Strings.tasks);
+      TaskListModel taskList = TaskListModel(
+        tasks: box.values.toList(),
+      );
+      AppwriteService.database.createDocument(
+        databaseId: Strings.databaseId,
+        collectionId: Strings.collectionId,
+        documentId: ID.unique(),
+        data: taskList.toJson(),
+        permissions: [
+          // Permission.create(Role.user(Constants.userId)),
+          Permission.read(Role.user(Constants.userId)),
+          Permission.delete(Role.user(Constants.userId)),
+          Permission.update(Role.user(Constants.userId)),
+        ],
+      ).then((value) {
+        if (value.data.isNotEmpty) {
+          print('Success');
+        }
+      });
+    }
   }
 
   @override
@@ -107,6 +145,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       if (boxContent.isEmpty) {
                         return EmptyScreenPage(size: size);
                       } else {
+                        checkConnection();
                         return ListView.separated(
                           itemCount: boxContent.length,
                           itemBuilder: (context, index) {
@@ -198,7 +237,7 @@ class EmptyScreenPage extends StatelessWidget {
               ),
             ],
           ),
-        )
+        ),
       ],
     );
   }

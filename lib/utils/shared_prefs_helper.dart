@@ -22,13 +22,13 @@ class SharedPrefs {
     return isCleared;
   }
 
-  static setValue(String? key, String? value) async {
+  static setValue({required String key, String? value}) async {
     if (value == null) return;
     var prefs = await _instance;
-    prefs.setString(key!, value);
+    prefs.setString(key, value);
   }
 
-  static getValue(String key) async {
+  static String? getValue({required String key}) {
     return _prefsInstance!.getString(key);
   }
 

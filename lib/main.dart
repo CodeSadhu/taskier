@@ -8,7 +8,6 @@ import 'package:appwrite_hack/utils/colors.dart';
 import 'package:appwrite_hack/utils/constants.dart';
 import 'package:appwrite_hack/utils/shared_prefs_helper.dart';
 import 'package:appwrite_hack/utils/strings.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -36,6 +35,7 @@ void main() async {
 
 Future<void> initializeHive() async {
   await Hive.initFlutter();
+  Hive.registerAdapter(TaskListModelAdapter());
   Hive.registerAdapter(TaskModelAdapter());
   await Hive.openBox<TaskModel>(Strings.tasks);
 }
@@ -94,6 +94,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   String? token;
+  String? sessionId;
   late CommonProvider _commonProvider;
 
   @override
@@ -101,17 +102,8 @@ class _MainPageState extends State<MainPage> {
     // TODO: implement initState
     super.initState();
     token = SharedPrefs.getToken();
+    sessionId = SharedPrefs.getValue(key: Strings.session);
     _commonProvider = Provider.of<CommonProvider>(context, listen: false);
-  }
-
-  void checkConnection() async {
-    final ConnectivityResult state = await Connectivity().checkConnectivity();
-    if (state == ConnectivityResult.mobile ||
-        state == ConnectivityResult.wifi ||
-        state == ConnectivityResult.ethernet ||
-        state == ConnectivityResult.vpn) {
-      _commonProvider.connectionChanged(true);
-    }
   }
 
   @override
@@ -124,6 +116,8 @@ class _MainPageState extends State<MainPage> {
     if (token == null) {
       return const LoginPage();
     } else {
+      Constants.userId = token!;
+      Constants.sessionId = sessionId!;
       return const DashboardPage();
     }
   }

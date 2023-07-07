@@ -157,6 +157,7 @@ class _LoginPageState extends State<LoginPage> {
               user.then((value) {
                 Constants.navigateToDashboard(
                   userId: value.userId,
+                  sessionId: value.$id,
                   // providerAccessToken: value.providerAccessToken,
                   // providerRefreshToken: value.providerRefreshToken,
                 );

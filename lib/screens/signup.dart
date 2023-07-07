@@ -177,6 +177,7 @@ class _SignupPageState extends State<SignupPage> {
                   account.then((value) {
                     Constants.navigateToDashboard(
                       userId: value.userId,
+                      sessionId: value.$id,
                       // providerAccessToken: value.providerAccessToken,
                       // providerRefreshToken: value.providerRefreshToken,
                     );
